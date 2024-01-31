@@ -4,6 +4,7 @@
   import RouterLink from '../components/UI/RouterLink.vue'
   import Heading from '../components/UI/Heading.vue'
   import Cliente from '../components/Cliente.vue'
+import router from '@/router'
 
   const clientes = ref([])
 
@@ -20,6 +21,28 @@
   })
 
   const existenClientes = computed(() => clientes.value.length > 0)
+
+  const actualizarEstado = ({id, estado}) => {
+    ClienteService.cambiarEstado(id, {estado: estado ? 0 : 1})
+      .then(() => {
+        const i = clientes.value.findIndex(cliente => cliente.id === id)
+        clientes.value[i].estado = estado ? 0 : 1
+      })
+      .catch(error => console.log('Hubo un error'))
+  }
+
+const eliminarCliente = (id) => {
+    // Volver a preguntar si está seguro de eliminar el cliente
+    if (!confirm('¿Estás seguro de eliminar el cliente?')) {
+      return
+    }
+  
+    ClienteService.eliminarCliente(id)
+      .then(() => {
+        clientes.value = clientes.value.filter(cliente => cliente.id !== id)
+      })
+      .catch(error => console.log('Hubo un error'))
+  }
 </script>
 
 <template>
@@ -50,6 +73,8 @@
                 v-for="cliente in clientes"
                 :key="cliente.id"
                 :cliente="cliente"
+                @actualizar-estado="actualizarEstado"
+                @eliminar-cliente="eliminarCliente"
               />
             </tbody>
           </table>

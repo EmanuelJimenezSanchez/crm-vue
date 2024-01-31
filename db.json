@@ -1,24 +1,24 @@
 {
   "clientes": [
     {
-      "id": "409f",
       "nombre": "Emanuel",
       "apellido": "Jimenez",
       "email": "correo@correo.com",
       "telefono": "332-338-0274",
       "empresa": "Emanuel",
       "puesto": "Desarrollador Fullstack",
-      "estado": 1
+      "id": "409f",
+      "estado": 0
     },
     {
-      "id": "4350",
+      "id": "89e3",
       "nombre": "Emanuel",
       "apellido": "Jimenez",
-      "email": "correo2@correo.com",
+      "email": "hola@hola.com",
       "telefono": "332-338-0274",
       "empresa": "Emanuel",
       "puesto": "Desarrollador Fullstack",
-      "estado": 0
+      "estado": 1
     }
   ]
 }
