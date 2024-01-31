@@ -1,31 +1,24 @@
 {
   "clientes": [
     {
-      "id": "466a",
+      "id": "409f",
       "nombre": "Emanuel",
       "apellido": "Jimenez",
       "email": "correo@correo.com",
       "telefono": "332-338-0274",
       "empresa": "Emanuel",
-      "puesto": "Desarrollador Fullstack"
+      "puesto": "Desarrollador Fullstack",
+      "estado": 1
     },
     {
-      "id": "799b",
+      "id": "4350",
       "nombre": "Emanuel",
       "apellido": "Jimenez",
       "email": "correo2@correo.com",
       "telefono": "332-338-0274",
       "empresa": "Emanuel",
-      "puesto": "Desarrollador Fullstack"
-    },
-    {
-      "id": "a38c",
-      "nombre": "Emanuel",
-      "apellido": "Jimenez",
-      "email": "hola@hola.com",
-      "telefono": "332-338-0274",
-      "empresa": "Emanuel",
-      "puesto": "Desarrollador Fullstack"
+      "puesto": "Desarrollador Fullstack",
+      "estado": 0
     }
   ]
 }
