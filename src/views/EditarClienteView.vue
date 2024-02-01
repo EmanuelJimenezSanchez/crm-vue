@@ -1,10 +1,14 @@
 <script setup>
-  import { onMounted, reactive } from 'vue'
+  import { onMounted, reactive, watch } from 'vue'
   import ClienteService from '../services/ClienteService'
   import { FormKit } from '@formkit/vue'
   import { useRouter, useRoute } from 'vue-router'
   import RouterLink from '../components/UI/RouterLink.vue'
   import Heading from '../components/UI/Heading.vue'
+
+  // Firebase
+  import { useFirestore, useDocument } from 'vuefire'
+  import { doc, updateDoc } from 'firebase/firestore'
 
   const router = useRouter()
   const route = useRoute()
@@ -13,13 +17,22 @@
 
   const formData = reactive({})
 
-  onMounted(() => {
-    ClienteService.obtenerCliente(id)
-      .then(({data}) => {
-        Object.assign(formData, data)
-      })
-      .catch(error => console.log(error))
+  // Firebase
+  const db = useFirestore()
+  const clienteRef = doc(db, 'clientes', id)
+  const cliente = useDocument(clienteRef)
+
+  watch(cliente, (cliente) => {
+    Object.assign(formData, cliente)
   })
+
+  // onMounted(() => {
+  //   ClienteService.obtenerCliente(id)
+  //     .then(({data}) => {
+  //       Object.assign(formData, data)
+  //     })
+  //     .catch(error => console.log(error))
+  // })
 
   defineProps({
     titulo: {
@@ -28,9 +41,15 @@
   })
 
   const handleSubmit = (data) => {
-    ClienteService.actualizarCliente(id, data)
-      .then(respuesta => {
-        // Redireccionar
+    // ClienteService.actualizarCliente(id, data)
+    //   .then(respuesta => {
+    //     // Redireccionar
+    //     router.push({name : 'listado-clientes'})
+    //   })
+    //   .catch(error => console.log(error))
+
+    updateDoc(clienteRef, data)
+      .then(() => {
         router.push({name : 'listado-clientes'})
       })
       .catch(error => console.log(error))

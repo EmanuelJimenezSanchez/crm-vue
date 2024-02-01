@@ -4,15 +4,21 @@
   import RouterLink from '../components/UI/RouterLink.vue'
   import Heading from '../components/UI/Heading.vue'
   import Cliente from '../components/Cliente.vue'
-import router from '@/router'
 
-  const clientes = ref([])
+  // Firebase
+  import { useFirestore, useCollection } from 'vuefire'
+  import { collection, updateDoc, deleteDoc ,doc } from 'firebase/firestore'
 
-  onMounted(() => {
-    ClienteService.obtenerClientes()
-      .then(({data}) => clientes.value = data)
-      .catch((error => console.log('Hubo un error')))  
-  })
+  const db = useFirestore()
+  const clientesCollection = useCollection(collection(db, 'clientes'))
+  
+  // const clientes = ref([])
+
+  // onMounted(() => {
+  //   ClienteService.obtenerClientes()
+  //     .then(({data}) => clientes.value = data)
+  //     .catch((error => console.log('Hubo un error')))  
+  // })
 
   defineProps({
     titulo: {
@@ -20,28 +26,43 @@ import router from '@/router'
     }
   })
 
-  const existenClientes = computed(() => clientes.value.length > 0)
+  const existenClientes = computed(() => clientesCollection.value.length > 0)
 
   const actualizarEstado = ({id, estado}) => {
-    ClienteService.cambiarEstado(id, {estado: estado ? 0 : 1})
+    // ClienteService.cambiarEstado(id, {estado: estado ? 0 : 1})
+    //   .then(() => {
+    //     const i = clientes.value.findIndex(cliente => cliente.id === id)
+    //     clientes.value[i].estado = estado ? 0 : 1
+    //   })
+    //   .catch(error => console.log('Hubo un error'))
+
+    const clienteRef = doc(db, 'clientes', id)
+    updateDoc(clienteRef, {estado: estado ? 0 : 1})
       .then(() => {
-        const i = clientes.value.findIndex(cliente => cliente.id === id)
-        clientes.value[i].estado = estado ? 0 : 1
+        const i = clientesCollection.value.findIndex(cliente => cliente.id === id)
+        clientesCollection.value[i].estado = estado ? 0 : 1
       })
-      .catch(error => console.log('Hubo un error'))
+      .catch(error => console.log(error))
   }
 
-const eliminarCliente = (id) => {
+  const eliminarCliente = (id) => {
     // Volver a preguntar si está seguro de eliminar el cliente
     if (!confirm('¿Estás seguro de eliminar el cliente?')) {
       return
     }
   
-    ClienteService.eliminarCliente(id)
+    // ClienteService.eliminarCliente(id)
+    //   .then(() => {
+    //     clientes.value = clientes.value.filter(cliente => cliente.id !== id)
+    //   })
+    //   .catch(error => console.log('Hubo un error'))
+
+    const clienteRef = doc(db, 'clientes', id)
+    deleteDoc(clienteRef)
       .then(() => {
-        clientes.value = clientes.value.filter(cliente => cliente.id !== id)
+        clientesCollection.value = clientesCollection.value.filter(cliente => cliente.id !== id)
       })
-      .catch(error => console.log('Hubo un error'))
+      .catch(error => console.log(error))
   }
 </script>
 
@@ -70,7 +91,7 @@ const eliminarCliente = (id) => {
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
               <Cliente
-                v-for="cliente in clientes"
+                v-for="cliente in clientesCollection"
                 :key="cliente.id"
                 :cliente="cliente"
                 @actualizar-estado="actualizarEstado"

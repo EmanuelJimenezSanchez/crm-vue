@@ -8,7 +8,7 @@
       "empresa": "Emanuel",
       "puesto": "Desarrollador Fullstack",
       "id": "409f",
-      "estado": 0
+      "estado": 1
     },
     {
       "id": "89e3",
@@ -18,7 +18,7 @@
       "telefono": "332-338-0274",
       "empresa": "Emanuel",
       "puesto": "Desarrollador Fullstack",
-      "estado": 1
+      "estado": 0
     }
   ]
 }
